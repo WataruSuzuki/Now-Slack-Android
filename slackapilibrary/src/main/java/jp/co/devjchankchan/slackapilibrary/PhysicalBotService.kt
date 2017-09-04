@@ -35,9 +35,11 @@ class PhysicalBotService : Service(), BeaconConsumer {
             editor.apply()
         }
     public var myLeaveSeatMonitoringListener: LeaveSeatMonitoringListener? = null
+    public var distanceMeasurement = 2.0
 
     private lateinit var currentIdentifier: Identifier
     private lateinit var beaconManager: BeaconManager
+    private var currentDistance = distanceMeasurement
 
     override fun onBind(intent: Intent): IBinder? {
         // TODO: Return the communication channel to the service.
@@ -51,11 +53,12 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
         setupBeaconManager()
         sharedInstance = this
-        notifyStartService()
+        notifyMessage(NotificationId.START)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        notifyMessage(NotificationId.STOP)
         beaconManager.unbind(this)
         sharedInstance = null
     }
@@ -67,6 +70,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
             try {
                 beaconManager.startRangingBeaconsInRegion(Region("unique-id-001", currentIdentifier, null, null))
+                notifyMessage(NotificationId.DID_ENTER_REGION)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
@@ -76,6 +80,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
             Log.d(LOG_TAG, "didExitRegion")
             try {
                 beaconManager.stopRangingBeaconsInRegion(Region("unique-id-001", currentIdentifier, null, null))
+                notifyMessage(NotificationId.DID_EXIT_REGION)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
@@ -83,6 +88,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
         override fun didDetermineStateForRegion(i: Int, region: Region) {
             Log.d(LOG_TAG, "didDetermineStateForRegion")
+            notifyMessage(NotificationId.DID_DETERMINE_STATE_FOR_REGION)
         }
     }
 
@@ -91,6 +97,22 @@ class PhysicalBotService : Service(), BeaconConsumer {
             myLeaveSeatMonitoringListener?.onUpdateRangeBeaconsInRegion(beacons, region)
             for (beacon in beacons) {
                 Log.i(LOG_TAG, "UUID:" + beacon.id1 + ", major:" + beacon.id2 + ", minor:" + beacon.id3 + ", Distance:" + beacon.distance + ",RSSI" + beacon.rssi + ", TxPower" + beacon.txPower)
+                if (iBeaconUUID.equals(beacon.id1.toString(), true)) {
+                    if (currentDistance == distanceMeasurement) {
+                        //Do nothing
+                    } else if (currentDistance > beacon.distance
+                            && beacon.distance > distanceMeasurement
+                            && sittingNow) {
+                        sittingNow = false
+                        notifyMessage(NotificationId.DID_LEAVE_SEAT)
+                    } else if (currentDistance < beacon.distance
+                            && beacon.distance < distanceMeasurement
+                            && !sittingNow) {
+                        sittingNow = true
+                        notifyMessage(NotificationId.DID_ARRIVE_SEAT)
+                    }
+                    currentDistance = beacon.distance
+                }
             }
         }
     }
@@ -108,10 +130,6 @@ class PhysicalBotService : Service(), BeaconConsumer {
         beaconManager.bind(this);
     }
 
-    private fun notifyStartService() {
-        notifyMessage(NotificationId.START)
-    }
-    
     private fun notifyMessage(msg: NotificationId) {
         val manager = NotificationManagerCompat.from(applicationContext)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -138,7 +156,8 @@ class PhysicalBotService : Service(), BeaconConsumer {
     }
 
     companion object {
-        public var sharedInstance: PhysicalBotService? = null
+        var sharedInstance: PhysicalBotService? = null
+        var sittingNow = false
     }
 
     enum class NotificationId(val resourceId: Int) {
