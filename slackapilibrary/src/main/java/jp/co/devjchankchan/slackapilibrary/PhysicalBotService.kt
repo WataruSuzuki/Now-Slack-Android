@@ -55,9 +55,8 @@ class PhysicalBotService : Service(), BeaconConsumer {
     override fun onCreate() {
         super.onCreate()
 
-        setupBeaconManager()
+        startupBeaconManager()
         sharedInstance = this
-        notifyMessage(RegionNotification.START, NotificationId.REGION)
     }
 
     override fun onDestroy() {
@@ -127,11 +126,17 @@ class PhysicalBotService : Service(), BeaconConsumer {
         beaconManager.startMonitoringBeaconsInRegion(Region("unique-id-001", currentIdentifier, null, null))
     }
 
-    private fun setupBeaconManager() {
-        currentIdentifier = Identifier.parse(iBeaconUUID)
-        beaconManager = BeaconManager.getInstanceForApplication(applicationContext)
-        beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout(iBeaconFormat))
-        beaconManager.bind(this);
+    private fun startupBeaconManager() {
+        if (iBeaconUUID.isBlank()) {
+            notifyMessage(RegionNotification.NOT_INITIALIZED, NotificationId.REGION)
+        } else{
+            currentIdentifier = Identifier.parse(iBeaconUUID)
+            beaconManager = BeaconManager.getInstanceForApplication(applicationContext)
+            beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout(iBeaconFormat))
+            beaconManager.bind(this);
+
+            notifyMessage(RegionNotification.START, NotificationId.REGION)
+        }
     }
 
     private fun notifyMessage(msg: RegionNotification, id: NotificationId) {
@@ -166,6 +171,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
     enum class RegionNotification(val resourceId: Int) {
         START(R.string.notify_start_service),
+        NOT_INITIALIZED(R.string.notify_not_initialized),
         DID_DETERMINE_STATE_FOR_REGION(R.string.notify_did_determine_state_region),
         DID_ENTER_REGION(R.string.notify_did_enter_region),
         DID_ARRIVE_SEAT(R.string.notify_arrive_seat),
