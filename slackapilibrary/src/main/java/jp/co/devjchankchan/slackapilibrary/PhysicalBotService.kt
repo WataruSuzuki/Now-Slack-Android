@@ -166,9 +166,12 @@ class PhysicalBotService : Service(), BeaconConsumer {
         var sittingNow = false
 
         fun saveBeaconUUID(context: Context, value: String) {
+            putPreference(context, KEY_BEACON_UUID, value)
+        }
+
+        private fun putPreference(context: Context, key: String, value: String) {
             val data = context.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
             val editor = data.edit()
-            editor.putString(KEY_BEACON_UUID, value)
             editor.apply()
         }
     }
