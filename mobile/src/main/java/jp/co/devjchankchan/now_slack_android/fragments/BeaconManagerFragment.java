@@ -97,6 +97,7 @@ public class BeaconManagerFragment extends Fragment implements View.OnClickListe
                     statusMessage.setText(R.string.barcode_success);
                     barcodeValue.setText(barcode.displayValue);
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                    saveBeaconUUID(barcode.displayValue);
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
                     Log.d(TAG, "No barcode captured, intent data is null");
@@ -107,6 +108,15 @@ public class BeaconManagerFragment extends Fragment implements View.OnClickListe
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void saveBeaconUUID(String uuid) {
+        PhysicalBotService service = PhysicalBotService.Companion.getSharedInstance();
+        if (service != null) {
+            service.setIBeaconUUID(uuid);
+        } else {
+            Toast.makeText(getActivity(), "Beacon service is not start yet...", Toast.LENGTH_LONG).show();
         }
     }
 

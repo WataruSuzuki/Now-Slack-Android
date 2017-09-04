@@ -27,7 +27,11 @@ class PhysicalBotService : Service(), BeaconConsumer {
     */
     private val iBeaconFormat = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
 
-    public var iBeaconUUID : String = "1E21BCE0-7655-4647-B492-A3F8DE2F9A02"
+    var iBeaconUUID : String// = "1E21BCE0-7655-4647-B492-A3F8DE2F9A02"
+        get() {
+            val data = applicationContext.getSharedPreferences("LastMemory", Context.MODE_PRIVATE)
+            return data.getString(KEY_BEACON_UUID, "")
+        }
         set(value) {
             val data = applicationContext.getSharedPreferences("LastMemory", Context.MODE_PRIVATE)
             val editor = data.edit()
