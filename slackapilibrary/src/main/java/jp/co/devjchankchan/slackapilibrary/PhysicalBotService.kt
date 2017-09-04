@@ -20,7 +20,6 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
     private val CHANNEL_ID = javaClass.toString()
     private val LOG_TAG = javaClass.simpleName
-    private val KEY_BEACON_UUID = "beacon_uuid"
 
     /* NOTE: beacon layouts
         https://stackoverflow.com/questions/32513423/android-altbeacon-library-how-to-find-the-beacon-layout
@@ -33,10 +32,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
             return data.getString(KEY_BEACON_UUID, "")
         }
         set(value) {
-            val data = applicationContext.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
-            val editor = data.edit()
-            editor.putString(KEY_BEACON_UUID, value)
-            editor.apply()
+            saveBeaconUUID(applicationContext, value)
         }
     public var myLeaveSeatMonitoringListener: LeaveSeatMonitoringListener? = null
     public var distanceMeasurement = 2.0
@@ -165,8 +161,16 @@ class PhysicalBotService : Service(), BeaconConsumer {
     }
 
     companion object {
+        val KEY_BEACON_UUID = "beacon_uuid"
         var sharedInstance: PhysicalBotService? = null
         var sittingNow = false
+
+        fun saveBeaconUUID(context: Context, value: String) {
+            val data = context.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
+            val editor = data.edit()
+            editor.putString(KEY_BEACON_UUID, value)
+            editor.apply()
+        }
     }
 
     enum class RegionNotification(val resourceId: Int) {

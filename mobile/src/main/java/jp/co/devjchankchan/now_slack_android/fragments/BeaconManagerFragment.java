@@ -116,8 +116,9 @@ public class BeaconManagerFragment extends Fragment implements View.OnClickListe
         if (service != null) {
             service.setIBeaconUUID(uuid);
         } else {
-            Toast.makeText(getActivity(), "Beacon service is not start yet...", Toast.LENGTH_LONG).show();
+            PhysicalBotService.Companion.saveBeaconUUID(getActivity(), uuid);
         }
+        Toast.makeText(getActivity(), getString(R.string.msg_req_restart_beacon), Toast.LENGTH_LONG).show();
     }
 
     private void connectBeaconService() {
