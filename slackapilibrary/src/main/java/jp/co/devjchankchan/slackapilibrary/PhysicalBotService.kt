@@ -53,12 +53,12 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
         setupBeaconManager()
         sharedInstance = this
-        notifyMessage(NotificationId.START)
+        notifyMessage(RegionNotification.START, NotificationId.REGION)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        notifyMessage(NotificationId.STOP)
+        notifyMessage(RegionNotification.STOP, NotificationId.REGION)
         beaconManager.unbind(this)
         sharedInstance = null
     }
@@ -70,7 +70,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
             try {
                 beaconManager.startRangingBeaconsInRegion(Region("unique-id-001", currentIdentifier, null, null))
-                notifyMessage(NotificationId.DID_ENTER_REGION)
+                notifyMessage(RegionNotification.DID_ENTER_REGION, NotificationId.REGION)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
@@ -80,7 +80,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
             Log.d(LOG_TAG, "didExitRegion")
             try {
                 beaconManager.stopRangingBeaconsInRegion(Region("unique-id-001", currentIdentifier, null, null))
-                notifyMessage(NotificationId.DID_EXIT_REGION)
+                notifyMessage(RegionNotification.DID_EXIT_REGION, NotificationId.REGION)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
@@ -88,7 +88,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
         override fun didDetermineStateForRegion(i: Int, region: Region) {
             Log.d(LOG_TAG, "didDetermineStateForRegion")
-            notifyMessage(NotificationId.DID_DETERMINE_STATE_FOR_REGION)
+            notifyMessage(RegionNotification.DID_DETERMINE_STATE_FOR_REGION, NotificationId.REGION)
         }
     }
 
@@ -104,12 +104,12 @@ class PhysicalBotService : Service(), BeaconConsumer {
                             && beacon.distance > distanceMeasurement
                             && sittingNow) {
                         sittingNow = false
-                        notifyMessage(NotificationId.DID_LEAVE_SEAT)
+                        notifyMessage(RegionNotification.DID_LEAVE_SEAT, NotificationId.REGION)
                     } else if (currentDistance < beacon.distance
                             && beacon.distance < distanceMeasurement
                             && !sittingNow) {
                         sittingNow = true
-                        notifyMessage(NotificationId.DID_ARRIVE_SEAT)
+                        notifyMessage(RegionNotification.DID_ARRIVE_SEAT, NotificationId.REGION)
                     }
                     currentDistance = beacon.distance
                 }
@@ -130,12 +130,12 @@ class PhysicalBotService : Service(), BeaconConsumer {
         beaconManager.bind(this);
     }
 
-    private fun notifyMessage(msg: NotificationId) {
+    private fun notifyMessage(msg: RegionNotification, id: NotificationId) {
         val manager = NotificationManagerCompat.from(applicationContext)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            manager.notify(msg.ordinal, legacyNotificationBuilder(getString(msg.resourceId)).build())
+            manager.notify(id.ordinal, legacyNotificationBuilder(getString(msg.resourceId)).build())
         } else {
-            manager.notify(msg.ordinal, notificationBuilder(getString(msg.resourceId)).build())
+            manager.notify(id.ordinal, notificationBuilder(getString(msg.resourceId)).build())
         }
     }
 
@@ -160,7 +160,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
         var sittingNow = false
     }
 
-    enum class NotificationId(val resourceId: Int) {
+    enum class RegionNotification(val resourceId: Int) {
         START(R.string.notify_start_service),
         DID_DETERMINE_STATE_FOR_REGION(R.string.notify_did_determine_state_region),
         DID_ENTER_REGION(R.string.notify_did_enter_region),
@@ -168,5 +168,10 @@ class PhysicalBotService : Service(), BeaconConsumer {
         DID_LEAVE_SEAT(R.string.notify_leave_seat),
         DID_EXIT_REGION(R.string.notify_did_exit_region),
         STOP(R.string.notify_start_stop)
+    }
+
+    enum class NotificationId {
+        REGION,
+        OTHER
     }
 }
