@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationManagerCompat
 
 class PhysicalBotService : Service() {
 
-    private val CHANNEL_ID = packageName
+    private val CHANNEL_ID = javaClass.toString()
 
     override fun onBind(intent: Intent): IBinder? {
         // TODO: Return the communication channel to the service.
