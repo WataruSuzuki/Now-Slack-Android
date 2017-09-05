@@ -41,4 +41,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.github.pschroen:slack-api-android:c66cc8d997'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'org.altbeacon:android-beacon-library:2+'
+}
+repositories {
+    mavenCentral()
 }
