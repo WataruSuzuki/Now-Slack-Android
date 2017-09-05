@@ -9,10 +9,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-        <!--<uses-library-->
-            <!--android:name="com.google.android.wearable"-->
-            <!--android:required="false" />-->
-
         <receiver
             android:name="jp.co.devjchankchan.slackapilibrary.BootCompletedReceiver"
             android:enabled="true"
