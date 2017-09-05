@@ -1,11 +1,11 @@
 package jp.co.devjchankchan.slackapilibrary
 
-import android.R
+import android.app.Notification
 import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.support.annotation.IntDef
+import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 
@@ -18,24 +18,43 @@ class PhysicalBotService : Service() {
         throw UnsupportedOperationException("Not yet implemented")
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        //@IntDef(value = {Service.START_FLAG_REDELIVERY, Service.START_FLAG_RETRY}, flag = true)
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return Service.START_REDELIVER_INTENT
     }
 
     override fun onCreate() {
         super.onCreate()
 
-        val manager = NotificationManagerCompat.from(applicationContext)
-        manager.notify(1, legacyNotificationBuilder.build())
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        notifyStartService()
+    }
 
+    private fun notifyStartService() {
+        val manager = NotificationManagerCompat.from(applicationContext)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            manager.notify(NotificationId.START.ordinal, legacyNotificationBuilder(getString(NotificationId.START.resourceId)).build())
+        } else {
+            manager.notify(NotificationId.START.ordinal, notificationBuilder(getString(NotificationId.START.resourceId)).build())
         }
     }
 
-    private val legacyNotificationBuilder: NotificationCompat.Builder
-        get() = NotificationCompat.Builder(applicationContext)
-                .setSmallIcon(R.drawable.sym_def_app_icon)
-                .setContentTitle("(・∀・)")
+    private fun legacyNotificationBuilder(title: String): NotificationCompat.Builder {
+        val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                .setContentTitle(title)
 
+        return builder
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun notificationBuilder(title: String): Notification.Builder {
+        val builder = Notification.Builder(applicationContext, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                .setContentTitle(title)
+        return builder
+    }
+
+    enum class NotificationId(val resourceId: Int) {
+        START(R.string.notify_start_service),
+        STOP(R.string.notify_start_stop)
+    }
 }

@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">SlackApiLibrary</string>
-    <string name="notify_start_service">Started updater service</string>
-    <string name="notify_start_stop">Stopped updater service</string>
+    <string name="notify_start_service">Started physical bot service</string>
+    <string name="notify_start_stop">Stopped physical bot service</string>
 </resources>
