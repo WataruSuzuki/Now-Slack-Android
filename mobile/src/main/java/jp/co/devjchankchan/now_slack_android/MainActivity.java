@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+    private Handler mMainLooperHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,16 +79,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_restart_beacon:
+                restartPhysicalBotService();
+                break;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            case R.id.action_other_settings:
+            default:
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -128,8 +130,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void restartPhysicalBotService() {
-        Intent service = new Intent(this, PhysicalBotService.class);
-        startService(service);
+        final Intent service = new Intent(this, PhysicalBotService.class);
         stopService(service);
+
+        mMainLooperHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startService(service);
+            }
+        }, 500);
     }
 }
