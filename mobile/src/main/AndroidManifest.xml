@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.co.devjchankchan.now_slack_android">
 
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -16,6 +18,13 @@
             android:name="com.google.android.wearable"
             android:required="false" />
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -26,6 +35,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".barcodereader.QrMainActivity"
+            android:label="Menu Barcode"/>
+        <activity android:name=".barcodereader.BarcodeCaptureActivity"
+            android:label="Read Barcode"/>
     </application>
 
 </manifest>

@@ -42,4 +42,5 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile project(':slackapilibrary')
+    compile 'com.google.android.gms:play-services-vision:11.0.4'
 }

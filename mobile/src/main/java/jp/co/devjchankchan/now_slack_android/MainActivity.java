@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import jp.co.devjchankchan.now_slack_android.barcodereader.QrMainActivity;
 import jp.co.devjchankchan.slackapilibrary.PhysicalBotService;
 
 public class MainActivity extends AppCompatActivity
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            startActivity(new Intent(this, QrMainActivity.class));
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
