@@ -8,8 +8,9 @@ import android.os.IBinder
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
+import org.altbeacon.beacon.BeaconConsumer
 
-class PhysicalBotService : Service() {
+class PhysicalBotService : Service(), BeaconConsumer {
 
     private val CHANNEL_ID = javaClass.toString()
 
@@ -26,6 +27,10 @@ class PhysicalBotService : Service() {
         super.onCreate()
 
         notifyStartService()
+    }
+
+    override fun onBeaconServiceConnect() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun notifyStartService() {
