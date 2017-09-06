@@ -2,6 +2,7 @@ package jp.co.devjchankchan.slackapilibrary
 
 import android.app.Notification
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -15,17 +16,23 @@ import org.altbeacon.beacon.MonitorNotifier
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.RangeNotifier
 
-
-
-
-
 class PhysicalBotService : Service(), BeaconConsumer {
 
     private val CHANNEL_ID = javaClass.toString()
     private val LOG_TAG = javaClass.simpleName
+    private val KEY_BEACON_UUID = "beacon_uuid"
 
-    public var iBeaconFormat = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
-    public var iBeaconUUID = "1E21BCE0-7655-4647-B492-A3F8DE2F9A02"
+    /* NOTE: beacon layouts
+        https://stackoverflow.com/questions/32513423/android-altbeacon-library-how-to-find-the-beacon-layout
+    */
+    private val iBeaconFormat = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
+    public var iBeaconUUID : String = "1E21BCE0-7655-4647-B492-A3F8DE2F9A02"
+        set(value) {
+            val data = applicationContext.getSharedPreferences("LastMemory", Context.MODE_PRIVATE)
+            val editor = data.edit()
+            editor.putString(KEY_BEACON_UUID, value)
+            editor.apply()
+        }
 
     private lateinit var currentIdentifier: Identifier
     private lateinit var beaconManager: BeaconManager
