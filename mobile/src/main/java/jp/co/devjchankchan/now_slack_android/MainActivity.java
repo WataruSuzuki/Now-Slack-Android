@@ -19,7 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import jp.co.devjchankchan.now_slack_android.barcodereader.QrMainActivity;
 import jp.co.devjchankchan.slackapilibrary.PhysicalBotService;
 
 public class MainActivity extends AppCompatActivity
