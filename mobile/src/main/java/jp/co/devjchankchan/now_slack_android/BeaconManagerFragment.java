@@ -41,12 +41,12 @@ public class BeaconManagerFragment extends Fragment implements View.OnClickListe
     private TextView barcodeValue;
 
     private static final int RC_BARCODE_CAPTURE = 9001;
-    private static final String TAG = "BarcodeMain";
+    private static final String TAG = "BeaconManagerFragment";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_qr_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_beacon_manager, container, false);
 
         statusMessage = (TextView)rootView.findViewById(R.id.status_message);
         barcodeValue = (TextView)rootView.findViewById(R.id.barcode_value);
