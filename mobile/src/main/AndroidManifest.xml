@@ -35,7 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".QrMainActivity"
+        <activity android:name=".BeaconManagerFragment"
             android:label="Menu Barcode"/>
         <activity android:name=".barcodereader.BarcodeCaptureActivity"
             android:label="Read Barcode"/>

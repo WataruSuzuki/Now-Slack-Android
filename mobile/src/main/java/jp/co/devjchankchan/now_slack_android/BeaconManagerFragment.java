@@ -16,9 +16,9 @@
 
 package jp.co.devjchankchan.now_slack_android;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -27,14 +27,13 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
-import jp.co.devjchankchan.now_slack_android.R;
 import jp.co.devjchankchan.now_slack_android.barcodereader.BarcodeCaptureActivity;
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.
  */
-public class QrMainActivity extends Activity implements View.OnClickListener {
+public class QrMainActivity extends Fragment implements View.OnClickListener {
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton autoFocus;
@@ -44,6 +43,7 @@ public class QrMainActivity extends Activity implements View.OnClickListener {
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
