@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package jp.co.devjchankchan.now_slack_android;
+package jp.co.devjchankchan.now_slack_android.fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import jp.co.devjchankchan.now_slack_android.R;
 import jp.co.devjchankchan.now_slack_android.barcodereader.BarcodeCaptureActivity;
 
 public class BeaconManagerFragment extends Fragment implements View.OnClickListener {
