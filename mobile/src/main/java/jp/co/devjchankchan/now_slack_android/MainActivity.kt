@@ -1,5 +1,6 @@
 package jp.co.devjchankchan.now_slack_android
 
+import android.app.Fragment
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer.setDrawerListener(toggle)
+        drawer.addDrawerListener(toggle)
         toggle.syncState()
     }
 
@@ -93,7 +94,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val id = item.itemId
 
         if (id == R.id.nav_camera) {
-            startActivity(Intent(this, QrMainActivity::class.java))
+            val page = DrawerPages.values().filter { id == it.menuId }.first()
+//            toggleToolbarElevation(page.shouldToggleToolbar())
+            changePage("(・∀・)", page.createFragment())
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -126,6 +130,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         stopService(service)
 
         mMainLooperHandler.postDelayed({ startService(service) }, 500)
+    }
+
+    private fun changePage(selectedPage: String, fragment: Fragment) {
+//        mSelectedContent = selectedPage
+//        mActionBar.setTitle(selectedPage)
+
+        // Swap page.
+        if (fragment != null) {
+            val fragmentManager = fragmentManager
+            val ft = fragmentManager.beginTransaction()
+            ft.replace(R.id.content_container, fragment)
+            ft.commit()
+        }
     }
 
     companion object {
