@@ -11,9 +11,9 @@
             android:icon="@drawable/ic_account_box_black_24dp"
             android:title="@string/account" />
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_beacon"
+            android:icon="@drawable/ic_track_changes_black_24dp"
+            android:title="@string/beacon" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

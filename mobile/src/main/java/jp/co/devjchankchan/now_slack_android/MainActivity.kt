@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         changePage(item.itemId)
 
         val id = item.itemId
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_beacon) {
 
         } else if (id == R.id.nav_account) {
 
