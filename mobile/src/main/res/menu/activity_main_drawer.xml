@@ -7,13 +7,13 @@
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/summary" />
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
             android:id="@+id/nav_account"
             android:icon="@drawable/ic_account_box_black_24dp"
             android:title="@string/account" />
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Import" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
