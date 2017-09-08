@@ -66,7 +66,7 @@ public class BeaconManagerFragment extends Fragment implements View.OnClickListe
         useFlash = (CompoundButton) rootView.findViewById(R.id.use_flash);
 
         rootView.findViewById(R.id.read_barcode).setOnClickListener(this);
-        setupBeaconListener();
+        connectBeaconService();
 
         return rootView;
     }
@@ -110,7 +110,7 @@ public class BeaconManagerFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    private void setupBeaconListener() {
+    private void connectBeaconService() {
         final Activity activity = getActivity();
         PhysicalBotService service = PhysicalBotService.Companion.getSharedInstance();
         if (service != null) {
