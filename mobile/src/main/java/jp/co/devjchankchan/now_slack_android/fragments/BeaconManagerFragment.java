@@ -16,6 +16,7 @@
 
 package jp.co.devjchankchan.now_slack_android.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,15 +27,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.Region;
+
+import java.util.Collection;
+
 import jp.co.devjchankchan.now_slack_android.R;
 import jp.co.devjchankchan.now_slack_android.barcodereader.BarcodeCaptureActivity;
+import jp.co.devjchankchan.slackapilibrary.LeaveSeatMonitoringListener;
+import jp.co.devjchankchan.slackapilibrary.PhysicalBotService;
 
 public class BeaconManagerFragment extends Fragment implements View.OnClickListener {
 
+    private LeaveSeatMonitoringListener beaconListener;
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton autoFocus;
     private CompoundButton useFlash;
@@ -56,6 +66,7 @@ public class BeaconManagerFragment extends Fragment implements View.OnClickListe
         useFlash = (CompoundButton) rootView.findViewById(R.id.use_flash);
 
         rootView.findViewById(R.id.read_barcode).setOnClickListener(this);
+        setupBeaconListener();
 
         return rootView;
     }
@@ -75,7 +86,6 @@ public class BeaconManagerFragment extends Fragment implements View.OnClickListe
 
             startActivityForResult(intent, RC_BARCODE_CAPTURE);
         }
-
     }
 
     @Override
@@ -95,9 +105,33 @@ public class BeaconManagerFragment extends Fragment implements View.OnClickListe
                 statusMessage.setText(String.format(getString(R.string.barcode_error),
                         CommonStatusCodes.getStatusCodeString(resultCode)));
             }
-        }
-        else {
+        } else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void setupBeaconListener() {
+        final Activity activity = getActivity();
+        PhysicalBotService service = PhysicalBotService.Companion.getSharedInstance();
+        if (service != null) {
+            beaconListener = new LeaveSeatMonitoringListener() {
+                @Override
+                public void onUpdateRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+                    for (Beacon beacon: beacons) {
+                        final String result = "Distance:" + beacon.getDistance();
+                        Log.d(TAG, result);
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                statusMessage.setText(result);
+                            }
+                        });
+                    }
+                }
+            };
+            service.setMyLeaveSeatMonitoringListener(beaconListener);
+        } else {
+            Toast.makeText(activity, "Beacon service is not start yet...", Toast.LENGTH_LONG).show();
         }
     }
 }

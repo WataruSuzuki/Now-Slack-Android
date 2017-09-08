@@ -26,6 +26,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
         https://stackoverflow.com/questions/32513423/android-altbeacon-library-how-to-find-the-beacon-layout
     */
     private val iBeaconFormat = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
+
     public var iBeaconUUID : String = "1E21BCE0-7655-4647-B492-A3F8DE2F9A02"
         set(value) {
             val data = applicationContext.getSharedPreferences("LastMemory", Context.MODE_PRIVATE)
@@ -33,6 +34,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
             editor.putString(KEY_BEACON_UUID, value)
             editor.apply()
         }
+    public var myLeaveSeatMonitoringListener: LeaveSeatMonitoringListener? = null
 
     private lateinit var currentIdentifier: Identifier
     private lateinit var beaconManager: BeaconManager
@@ -48,12 +50,14 @@ class PhysicalBotService : Service(), BeaconConsumer {
         super.onCreate()
 
         setupBeaconManager()
+        sharedInstance = this
         notifyStartService()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         beaconManager.unbind(this)
+        sharedInstance = null
     }
 
     private val leaveSeatMonitorNotifier = object : MonitorNotifier {
@@ -84,6 +88,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
     private val rangeNotifier = object : RangeNotifier {
         override fun didRangeBeaconsInRegion(beacons: Collection<Beacon>, region: Region) {
+            myLeaveSeatMonitoringListener?.onUpdateRangeBeaconsInRegion(beacons, region)
             for (beacon in beacons) {
                 Log.i(LOG_TAG, "UUID:" + beacon.id1 + ", major:" + beacon.id2 + ", minor:" + beacon.id3 + ", Distance:" + beacon.distance + ",RSSI" + beacon.rssi + ", TxPower" + beacon.txPower)
             }
@@ -126,6 +131,10 @@ class PhysicalBotService : Service(), BeaconConsumer {
                 .setSmallIcon(android.R.drawable.sym_def_app_icon)
                 .setContentTitle(title)
         return builder
+    }
+
+    companion object {
+        public var sharedInstance: PhysicalBotService? = null
     }
 
     enum class NotificationId(val resourceId: Int) {
