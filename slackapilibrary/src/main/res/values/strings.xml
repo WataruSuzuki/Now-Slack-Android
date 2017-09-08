@@ -2,4 +2,11 @@
     <string name="app_name">SlackApiLibrary</string>
     <string name="notify_start_service">Started physical bot service</string>
     <string name="notify_start_stop">Stopped physical bot service</string>
+
+    <string name="notify_did_determine_state_region">Determine state for region</string>
+    <string name="notify_did_enter_region">Entered region</string>
+    <string name="notify_did_exit_region">Exit region</string>
+    <string name="notify_arrive_seat">Arrive to seat</string>
+    <string name="notify_leave_seat">Leave from seat</string>
+
 </resources>

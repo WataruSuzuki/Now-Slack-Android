@@ -143,6 +143,11 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
     enum class NotificationId(val resourceId: Int) {
         START(R.string.notify_start_service),
+        DID_DETERMINE_STATE_FOR_REGION(R.string.notify_did_determine_state_region),
+        DID_ENTER_REGION(R.string.notify_did_enter_region),
+        DID_ARRIVE_SEAT(R.string.notify_arrive_seat),
+        DID_LEAVE_SEAT(R.string.notify_leave_seat),
+        DID_EXIT_REGION(R.string.notify_did_exit_region),
         STOP(R.string.notify_start_stop)
     }
 }
