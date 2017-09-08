@@ -5,14 +5,30 @@ import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import android.os.RemoteException
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
-import org.altbeacon.beacon.BeaconConsumer
+import android.util.Log
+import org.altbeacon.beacon.*
+import org.altbeacon.beacon.MonitorNotifier
+import org.altbeacon.beacon.Beacon
+import org.altbeacon.beacon.RangeNotifier
+
+
+
+
 
 class PhysicalBotService : Service(), BeaconConsumer {
 
     private val CHANNEL_ID = javaClass.toString()
+    private val LOG_TAG = javaClass.simpleName
+
+    public var iBeaconFormat = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
+    public var iBeaconUUID = "1E21BCE0-7655-4647-B492-A3F8DE2F9A02"
+
+    private lateinit var currentIdentifier: Identifier
+    private lateinit var beaconManager: BeaconManager
 
     override fun onBind(intent: Intent): IBinder? {
         // TODO: Return the communication channel to the service.
@@ -26,11 +42,60 @@ class PhysicalBotService : Service(), BeaconConsumer {
     override fun onCreate() {
         super.onCreate()
 
+        setupBeaconManager()
         notifyStartService()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        beaconManager.unbind(this)
+    }
+
+    private val leaveSeatMonitorNotifier = object : MonitorNotifier {
+
+        override fun didEnterRegion(region: Region) {
+            Log.d(LOG_TAG, "didEnterRegion")
+
+            try {
+                beaconManager.startRangingBeaconsInRegion(Region("unique-id-001", currentIdentifier, null, null))
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        }
+
+        override fun didExitRegion(region: Region) {
+            Log.d(LOG_TAG, "didExitRegion")
+            try {
+                beaconManager.stopRangingBeaconsInRegion(Region("unique-id-001", currentIdentifier, null, null))
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        }
+
+        override fun didDetermineStateForRegion(i: Int, region: Region) {
+            Log.d(LOG_TAG, "didDetermineStateForRegion")
+        }
+    }
+
+    private val rangeNotifier = object : RangeNotifier {
+        override fun didRangeBeaconsInRegion(beacons: Collection<Beacon>, region: Region) {
+            for (beacon in beacons) {
+                Log.i(LOG_TAG, "UUID:" + beacon.id1 + ", major:" + beacon.id2 + ", minor:" + beacon.id3 + ", Distance:" + beacon.distance + ",RSSI" + beacon.rssi + ", TxPower" + beacon.txPower)
+            }
+        }
+    }
+
     override fun onBeaconServiceConnect() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        beaconManager.addMonitorNotifier(leaveSeatMonitorNotifier)
+        beaconManager.addRangeNotifier(rangeNotifier)
+        beaconManager.startMonitoringBeaconsInRegion(Region("unique-id-001", currentIdentifier, null, null))
+    }
+
+    private fun setupBeaconManager() {
+        currentIdentifier = Identifier.parse(iBeaconUUID)
+        beaconManager = BeaconManager.getInstanceForApplication(applicationContext)
+        beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout(iBeaconFormat))
+        beaconManager.bind(this);
     }
 
     private fun notifyStartService() {
