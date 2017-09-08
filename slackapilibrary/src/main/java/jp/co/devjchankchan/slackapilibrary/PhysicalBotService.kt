@@ -109,9 +109,12 @@ class PhysicalBotService : Service(), BeaconConsumer {
     }
 
     private fun notifyStartService() {
+        notifyMessage(NotificationId.START)
+    }
+    
+    private fun notifyMessage(msg: NotificationId) {
         val manager = NotificationManagerCompat.from(applicationContext)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            manager.notify(NotificationId.START.ordinal, legacyNotificationBuilder(getString(NotificationId.START.resourceId)).build())
         } else {
             manager.notify(NotificationId.START.ordinal, notificationBuilder(getString(NotificationId.START.resourceId)).build())
         }
