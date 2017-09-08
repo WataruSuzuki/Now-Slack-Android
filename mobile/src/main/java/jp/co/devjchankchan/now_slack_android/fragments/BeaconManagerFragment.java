@@ -116,7 +116,7 @@ public class BeaconManagerFragment extends Fragment implements View.OnClickListe
         if (service != null) {
             beaconListener = new LeaveSeatMonitoringListener() {
                 @Override
-                public void onUpdateRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+                public void onUpdateRangeBeaconsInRegion(Collection<? extends Beacon> beacons, Region region) {
                     for (Beacon beacon: beacons) {
                         final String result = "Distance:" + beacon.getDistance();
                         Log.d(TAG, result);
