@@ -49,7 +49,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
     private lateinit var currentIdentifier: Identifier
     private lateinit var beaconManager: BeaconManager
-    private var currentDistance = distanceThreshold
+    private var currentDistance = 0.0
 
     override fun onBind(intent: Intent): IBinder? {
         // TODO: Return the communication channel to the service.
@@ -107,7 +107,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
             for (beacon in beacons) {
                 Log.i(LOG_TAG, "UUID:" + beacon.id1 + ", major:" + beacon.id2 + ", minor:" + beacon.id3 + ", Distance:" + beacon.distance + ",RSSI" + beacon.rssi + ", TxPower" + beacon.txPower)
                 if (iBeaconUUID.equals(beacon.id1.toString(), true)) {
-                    if (currentDistance == distanceThreshold) {
+                    if (currentDistance <= 0.0) {
                         //Do nothing
                     } else if (currentDistance > beacon.distance
                             && beacon.distance > distanceThreshold
