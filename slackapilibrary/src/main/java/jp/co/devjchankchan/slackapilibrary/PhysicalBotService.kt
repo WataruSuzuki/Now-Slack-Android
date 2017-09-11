@@ -25,6 +25,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
         https://stackoverflow.com/questions/32513423/android-altbeacon-library-how-to-find-the-beacon-layout
     */
     private val iBeaconFormat = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
+    private val DEFAULT_DISTANCE_THRESHOLD = 2.0
 
     var iBeaconUUID : String// = "1E21BCE0-7655-4647-B492-A3F8DE2F9A02"
         get() {
@@ -34,12 +35,21 @@ class PhysicalBotService : Service(), BeaconConsumer {
         set(value) {
             saveBeaconUUID(applicationContext, value)
         }
-    public var myLeaveSeatMonitoringListener: LeaveSeatMonitoringListener? = null
-    public var distanceMeasurement = 2.0
+    var myLeaveSeatMonitoringListener: LeaveSeatMonitoringListener? = null
+    var distanceThreshold: Double
+        get() {
+            val data = applicationContext.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
+            val value = data.getString(KEY_DISTANCE_THRESHOLD, "")
+            return if (value.isBlank()) DEFAULT_DISTANCE_THRESHOLD else value.toDouble()
+        }
+        set(value) {
+            saveDistanceThreshold(applicationContext, value)
+        }
+    var sittingNow = false
 
     private lateinit var currentIdentifier: Identifier
     private lateinit var beaconManager: BeaconManager
-    private var currentDistance = distanceMeasurement
+    private var currentDistance = distanceThreshold
 
     override fun onBind(intent: Intent): IBinder? {
         // TODO: Return the communication channel to the service.
@@ -97,15 +107,15 @@ class PhysicalBotService : Service(), BeaconConsumer {
             for (beacon in beacons) {
                 Log.i(LOG_TAG, "UUID:" + beacon.id1 + ", major:" + beacon.id2 + ", minor:" + beacon.id3 + ", Distance:" + beacon.distance + ",RSSI" + beacon.rssi + ", TxPower" + beacon.txPower)
                 if (iBeaconUUID.equals(beacon.id1.toString(), true)) {
-                    if (currentDistance == distanceMeasurement) {
+                    if (currentDistance == distanceThreshold) {
                         //Do nothing
                     } else if (currentDistance > beacon.distance
-                            && beacon.distance > distanceMeasurement
+                            && beacon.distance > distanceThreshold
                             && sittingNow) {
                         sittingNow = false
                         notifyMessage(RegionNotification.DID_LEAVE_SEAT, NotificationId.REGION)
                     } else if (currentDistance < beacon.distance
-                            && beacon.distance < distanceMeasurement
+                            && beacon.distance < distanceThreshold
                             && !sittingNow) {
                         sittingNow = true
                         notifyMessage(RegionNotification.DID_ARRIVE_SEAT, NotificationId.REGION)
@@ -162,16 +172,21 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
     companion object {
         val KEY_BEACON_UUID = "beacon_uuid"
+        val KEY_DISTANCE_THRESHOLD = "distance_threshold"
         var sharedInstance: PhysicalBotService? = null
-        var sittingNow = false
 
         fun saveBeaconUUID(context: Context, value: String) {
             putPreference(context, KEY_BEACON_UUID, value)
         }
 
+        fun saveDistanceThreshold(context: Context, value: Double) {
+            putPreference(context, KEY_DISTANCE_THRESHOLD, value.toString())
+        }
+
         private fun putPreference(context: Context, key: String, value: String) {
             val data = context.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
             val editor = data.edit()
+            editor.putString(key, value)
             editor.apply()
         }
     }
