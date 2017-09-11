@@ -35,7 +35,11 @@ class AuthActivity : AppCompatActivity() {
 
         override fun onLoadFinished(loader: Loader<String>?, data: String?) {
             //println("(・∀・) data = " + data)
-            parseAccessTokenFromJson(JSONObject(data))
+            if (parseAccessTokenFromJson(JSONObject(data))) {
+                finish()
+            } else {
+                Toast.makeText(this@AuthActivity, R.string.msg_fail_access_token, Toast.LENGTH_LONG).show()
+            }
         }
 
         override fun onLoaderReset(loader: Loader<String>?) {
@@ -82,14 +86,14 @@ class AuthActivity : AppCompatActivity() {
         loaderManager.initLoader(0, bundle, tokenLoaderCallbacks)
     }
 
-    private fun parseAccessTokenFromJson(json: JSONObject) {
+    private fun parseAccessTokenFromJson(json: JSONObject) : Boolean {
         val accessToken = json.getString(PhysicalBotService.KEY_ACCESS_TOKEN)
-        if (accessToken.isNullOrBlank()) {
-            Toast.makeText(this, R.string.msg_fail_access_token, Toast.LENGTH_LONG).show()
-        } else {
+        if (!accessToken.isNullOrBlank()) {
             println("(・∀・) accessToken = " + accessToken)
             PhysicalBotService.saveAccessToken(this, accessToken)
-            finish()
+
+            return true
         }
+        return false
     }
 }
