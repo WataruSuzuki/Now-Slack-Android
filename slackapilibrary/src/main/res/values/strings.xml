@@ -10,4 +10,5 @@
     <string name="notify_arrive_seat">Arrive to seat</string>
     <string name="notify_leave_seat">Leave from seat</string>
 
+    <string name="msg_fail_access_token">Failed to authorization</string>
 </resources>

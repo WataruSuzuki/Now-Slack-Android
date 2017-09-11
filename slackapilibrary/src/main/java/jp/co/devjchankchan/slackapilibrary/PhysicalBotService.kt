@@ -173,6 +173,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
     companion object {
         val KEY_BEACON_UUID = "beacon_uuid"
         val KEY_DISTANCE_THRESHOLD = "distance_threshold"
+        val KEY_ACCESS_TOKEN = "access_token"
         var sharedInstance: PhysicalBotService? = null
 
         fun saveBeaconUUID(context: Context, value: String) {
@@ -181,6 +182,10 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
         fun saveDistanceThreshold(context: Context, value: Double) {
             putPreference(context, KEY_DISTANCE_THRESHOLD, value.toString())
+        }
+
+        fun saveAccessToken(context: Context, value: String) {
+            putPreference(context, KEY_ACCESS_TOKEN, value)
         }
 
         private fun putPreference(context: Context, key: String, value: String) {
