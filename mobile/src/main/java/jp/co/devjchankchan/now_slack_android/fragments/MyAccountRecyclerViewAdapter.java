@@ -7,22 +7,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import jp.co.devjchankchan.now_slack_android.R;
-import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent.DummyItem;
 import jp.co.devjchankchan.now_slack_android.fragments.SlackManagerFragment.OnListFragmentInteractionListener;
+import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent.SlackMenuItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link SlackMenuItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyAccountRecyclerViewAdapter extends RecyclerView.Adapter<MyAccountRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<SlackMenuItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyAccountRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyAccountRecyclerViewAdapter(List<SlackMenuItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -61,7 +61,7 @@ public class MyAccountRecyclerViewAdapter extends RecyclerView.Adapter<MyAccount
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public SlackMenuItem mItem;
 
         public ViewHolder(View view) {
             super(view);

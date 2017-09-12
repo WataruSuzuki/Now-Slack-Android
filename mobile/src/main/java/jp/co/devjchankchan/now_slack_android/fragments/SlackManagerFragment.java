@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 
 import jp.co.devjchankchan.now_slack_android.R;
 import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent;
-import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent.DummyItem;
 import jp.co.devjchankchan.physicalbotlibrary.AuthActivity;
+import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent.SlackMenuItem;
 import jp.co.devjchankchan.physicalbotlibrary.SlackController;
 
 /**
@@ -23,7 +23,7 @@ import jp.co.devjchankchan.physicalbotlibrary.SlackController;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class AccountManagerFragment extends Fragment {
+public class SlackManagerFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -31,7 +31,7 @@ public class AccountManagerFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener = new OnListFragmentInteractionListener() {
         @Override
-        public void onListFragmentInteraction(DummyItem item) {
+        public void onListFragmentInteraction(SlackMenuItem item) {
             SlackController.requestAuthToken(getActivity());
         }
     };
@@ -40,13 +40,13 @@ public class AccountManagerFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AccountManagerFragment() {
+    public SlackManagerFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static AccountManagerFragment newInstance(int columnCount) {
-        AccountManagerFragment fragment = new AccountManagerFragment();
+    public static SlackManagerFragment newInstance(int columnCount) {
+        SlackManagerFragment fragment = new SlackManagerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -100,6 +100,6 @@ public class AccountManagerFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(SlackMenuItem item);
     }
 }
