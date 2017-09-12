@@ -15,6 +15,7 @@ import jp.co.devjchankchan.now_slack_android.R;
 import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent;
 import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent.DummyItem;
 import jp.co.devjchankchan.physicalbotlibrary.AuthActivity;
+import jp.co.devjchankchan.physicalbotlibrary.SlackController;
 
 /**
  * A fragment representing a list of Items.
@@ -31,7 +32,7 @@ public class AccountManagerFragment extends Fragment {
     private OnListFragmentInteractionListener mListener = new OnListFragmentInteractionListener() {
         @Override
         public void onListFragmentInteraction(DummyItem item) {
-            startActivity(new Intent(getActivity(), AuthActivity.class));
+            SlackController.requestAuthToken(getActivity());
         }
     };
 
