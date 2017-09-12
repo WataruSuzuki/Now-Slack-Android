@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import jp.co.devjchankchan.now_slack_android.R;
-import jp.co.devjchankchan.now_slack_android.fragments.AccountManagerFragment.OnListFragmentInteractionListener;
 import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent.DummyItem;
+import jp.co.devjchankchan.now_slack_android.fragments.SlackManagerFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
 

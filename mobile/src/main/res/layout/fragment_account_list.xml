@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="jp.co.devjchankchan.now_slack_android.fragments.AccountManagerFragment"
+    tools:context="jp.co.devjchankchan.now_slack_android.fragments.SlackManagerFragment"
     tools:listitem="@layout/fragment_account" />
