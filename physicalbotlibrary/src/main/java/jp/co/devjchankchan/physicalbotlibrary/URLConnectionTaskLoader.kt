@@ -1,4 +1,4 @@
-package jp.co.devjchankchan.slackapilibrary
+package jp.co.devjchankchan.physicalbotlibrary
 
 import android.content.AsyncTaskLoader
 import android.content.Context

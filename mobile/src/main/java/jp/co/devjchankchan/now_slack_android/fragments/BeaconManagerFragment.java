@@ -39,8 +39,8 @@ import java.util.Collection;
 
 import jp.co.devjchankchan.now_slack_android.R;
 import jp.co.devjchankchan.now_slack_android.barcodereader.BarcodeCaptureActivity;
-import jp.co.devjchankchan.slackapilibrary.LeaveSeatMonitoringListener;
-import jp.co.devjchankchan.slackapilibrary.PhysicalBotService;
+import jp.co.devjchankchan.physicalbotlibrary.LeaveSeatMonitoringListener;
+import jp.co.devjchankchan.physicalbotlibrary.PhysicalBotService;
 
 public class BeaconManagerFragment extends Fragment implements View.OnClickListener {
 

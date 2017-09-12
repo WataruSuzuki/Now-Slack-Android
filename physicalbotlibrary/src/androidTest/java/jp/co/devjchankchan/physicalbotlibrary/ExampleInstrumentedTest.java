@@ -1,4 +1,4 @@
-package jp.co.devjchankchan.slackapilibrary;
+package jp.co.devjchankchan.physicalbotlibrary;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

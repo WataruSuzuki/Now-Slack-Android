@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jp.co.devjchankchan.slackapilibrary.AuthActivity">
+    tools:context="jp.co.devjchankchan.physicalbotlibrary.AuthActivity">
 
     <WebView
         android:id="@+id/auth_web"

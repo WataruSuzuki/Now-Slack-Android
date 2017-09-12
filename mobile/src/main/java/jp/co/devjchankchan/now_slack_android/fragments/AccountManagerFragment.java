@@ -14,9 +14,7 @@ import android.view.ViewGroup;
 import jp.co.devjchankchan.now_slack_android.R;
 import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent;
 import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent.DummyItem;
-import jp.co.devjchankchan.slackapilibrary.AuthActivity;
-
-import java.util.List;
+import jp.co.devjchankchan.physicalbotlibrary.AuthActivity;
 
 /**
  * A fragment representing a list of Items.

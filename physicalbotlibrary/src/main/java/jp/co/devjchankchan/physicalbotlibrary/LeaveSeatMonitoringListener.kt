@@ -1,4 +1,4 @@
-package jp.co.devjchankchan.slackapilibrary
+package jp.co.devjchankchan.physicalbotlibrary
 
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.Region

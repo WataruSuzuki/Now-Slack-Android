@@ -18,7 +18,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 
-import jp.co.devjchankchan.slackapilibrary.PhysicalBotService
+import jp.co.devjchankchan.physicalbotlibrary.PhysicalBotService
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private val mMainLooperHandler = Handler(Looper.getMainLooper())
