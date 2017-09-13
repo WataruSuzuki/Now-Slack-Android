@@ -138,10 +138,98 @@ class PhysicalBotService : Service(), BeaconConsumer {
                             && !sittingNow) {
                         sittingNow = true
                         notifyMessage(RegionNotification.DID_ARRIVE_SEAT, NotificationId.REGION)
+                        if (mConnGatt != null) {
+//                            if (mStatus == BluetoothProfile.STATE_DISCONNECTED) {
+//                                // try to connect
+//                                mDevice = beacon.bluetoothName
+//                                mConnGatt = mDevice.connectGatt(this, false, mGattcallback)
+//                                mStatus = BluetoothProfile.STATE_CONNECTING
+//                            } else {
+//                                // re-connect and re-discover Services
+//                                mConnGatt.connect()
+//                                mConnGatt.discoverServices()
+//                            }
+                        }
+
                     }
                     currentDistance = beacon.distance
                 }
             }
+        }
+    }
+
+    val EXTRA_BLUETOOTH_DEVICE = "BT_DEVICE"
+    private var mDevice: BluetoothDevice? = null
+    private var mConnGatt: BluetoothGatt? = null
+    private var mStatus: Int = 0
+
+    private val mGattcallback = object : BluetoothGattCallback() {
+        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int,
+                                             newState: Int) {
+//            if (newState == BluetoothProfile.STATE_CONNECTED) {
+//                mStatus = newState
+//                mConnGatt.discoverServices()
+//            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+//                mStatus = newState
+//            }
+        }
+
+        override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+            for (service in gatt.services) {
+                if (service == null || service.uuid == null) {
+                    continue
+                }
+//                if (BleUuid.SERVICE_DEVICE_INFORMATION.equalsIgnoreCase(service
+//                        .uuid.toString())) {
+//                    mReadManufacturerNameButton
+//                            .setTag(service.getCharacteristic(UUID
+//                                    .fromString(BleUuid.CHAR_MANUFACTURER_NAME_STRING)))
+//                    mReadSerialNumberButton
+//                            .setTag(service.getCharacteristic(UUID
+//                                    .fromString(BleUuid.CHAR_SERIAL_NUMBEAR_STRING)))
+//                    runOnUiThread(Runnable {
+//                        mReadManufacturerNameButton.setEnabled(true)
+//                        mReadSerialNumberButton.setEnabled(true)
+//                    })
+//                }
+//                if (BleUuid.SERVICE_IMMEDIATE_ALERT.equalsIgnoreCase(service
+//                        .uuid.toString())) {
+//                    runOnUiThread(Runnable { mWriteAlertLevelButton.setEnabled(true) })
+//                    mWriteAlertLevelButton.setTag(service
+//                            .getCharacteristic(UUID
+//                                    .fromString(BleUuid.CHAR_ALERT_LEVEL)))
+//                }
+            }
+
+        }
+
+        override fun onCharacteristicRead(gatt: BluetoothGatt,
+                                          characteristic: BluetoothGattCharacteristic, status: Int) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+//                if (BleUuid.CHAR_MANUFACTURER_NAME_STRING
+//                        .equalsIgnoreCase(characteristic.uuid.toString())) {
+//                    val name = characteristic.getStringValue(0)
+//
+//                    runOnUiThread(Runnable {
+//                        mReadManufacturerNameButton.setText(name)
+//                        setProgressBarIndeterminateVisibility(false)
+//                    })
+//                } else if (BleUuid.CHAR_SERIAL_NUMBEAR_STRING
+//                        .equalsIgnoreCase(characteristic.uuid.toString())) {
+//                    val name = characteristic.getStringValue(0)
+//
+//                    runOnUiThread(Runnable {
+//                        mReadSerialNumberButton.setText(name)
+//                        setProgressBarIndeterminateVisibility(false)
+//                    })
+//                }
+
+            }
+        }
+
+        override fun onCharacteristicWrite(gatt: BluetoothGatt,
+                                           characteristic: BluetoothGattCharacteristic, status: Int) {
+
         }
     }
 
