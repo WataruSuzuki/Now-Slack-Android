@@ -1,7 +1,6 @@
 package jp.co.devjchankchan.now_slack_android.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -31,9 +30,17 @@ public class SlackManagerFragment extends Fragment {
     private OnListFragmentInteractionListener mListener = new OnListFragmentInteractionListener() {
         @Override
         public void onListFragmentInteraction(SlackMenuItem item) {
-            SlackController.requestAuthToken(getActivity());
+            switch (item.getId()) {
+                case AUTH:
+                    SlackController.requestAuthToken(getActivity());
+                    break;
+                case EMOJI_LIST:
+                    slackController.getEmojiList();
+                    break;
+            }
         }
     };
+    private SlackController slackController;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -59,6 +66,7 @@ public class SlackManagerFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        slackController = new SlackController();
     }
 
     @Override

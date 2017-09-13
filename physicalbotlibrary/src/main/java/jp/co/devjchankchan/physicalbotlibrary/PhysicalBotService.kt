@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.IBinder
 import android.os.RemoteException
@@ -28,10 +29,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
     private val DEFAULT_DISTANCE_THRESHOLD = 2.0
 
     var iBeaconUUID : String// = "1E21BCE0-7655-4647-B492-A3F8DE2F9A02"
-        get() {
-            val data = applicationContext.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
-            return data.getString(KEY_BEACON_UUID, "")
-        }
+        get() = getPreference(applicationContext).getString(KEY_BEACON_UUID, "")
         set(value) {
             saveBeaconUUID(applicationContext, value)
         }
@@ -39,11 +37,16 @@ class PhysicalBotService : Service(), BeaconConsumer {
     var distanceThreshold: Double
         get() {
             val data = applicationContext.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
-            val value = data.getString(KEY_DISTANCE_THRESHOLD, "")
+            val value = getPreference(applicationContext).getString(KEY_DISTANCE_THRESHOLD, "")
             return if (value.isBlank()) DEFAULT_DISTANCE_THRESHOLD else value.toDouble()
         }
         set(value) {
             saveDistanceThreshold(applicationContext, value)
+        }
+    var slackToken: String
+        get() = getPreference(applicationContext).getString(KEY_ACCESS_TOKEN, "")
+        set(value) {
+            saveAccessToken(applicationContext, value)
         }
     var sittingNow = false
 
@@ -194,6 +197,8 @@ class PhysicalBotService : Service(), BeaconConsumer {
             editor.putString(key, value)
             editor.apply()
         }
+
+        fun getPreference(context: Context) : SharedPreferences = context.getSharedPreferences(javaClass.simpleName, Context.MODE_PRIVATE)
     }
 
     enum class RegionNotification(val resourceId: Int) {
