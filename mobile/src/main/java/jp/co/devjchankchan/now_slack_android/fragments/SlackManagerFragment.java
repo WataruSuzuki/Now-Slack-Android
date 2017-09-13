@@ -10,10 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Map;
+
 import jp.co.devjchankchan.now_slack_android.R;
 import jp.co.devjchankchan.now_slack_android.fragments.content.SlackContent;
 import jp.co.devjchankchan.now_slack_android.fragments.content.SlackContent.SlackMenuItem;
 import jp.co.devjchankchan.physicalbotlibrary.SlackController;
+import kotlin.Function;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 /**
  * A fragment representing a list of Items.
@@ -35,7 +40,14 @@ public class SlackManagerFragment extends Fragment {
                     SlackController.Companion.requestAuthToken(getActivity());
                     break;
                 case EMOJI_LIST:
-                    slackController.getEmojiList();
+                    slackController.loadEmojiList(new Function1<Map<String, String>, Unit>() {
+                        @Override
+                        public Unit invoke(Map<String, String> emojiList) {
+                            System.out.println(emojiList.toString());
+                            return null;
+                        }
+                    });
+                    break;
                 case LOG_OUT:
                     SlackController.Companion.removeAuthToken(getActivity());
                     break;
@@ -68,7 +80,7 @@ public class SlackManagerFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-        slackController = new SlackController();
+        slackController = new SlackController(getActivity());
     }
 
     @Override

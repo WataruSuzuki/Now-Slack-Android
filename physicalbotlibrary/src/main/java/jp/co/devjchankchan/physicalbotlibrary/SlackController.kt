@@ -5,23 +5,25 @@ import android.content.Intent
 
 import allbegray.slack.SlackClientFactory
 import allbegray.slack.webapi.SlackWebApiClient
+import android.os.Handler
+import android.os.HandlerThread
 
-class SlackController {
+class SlackController(context: Context) {
 
     private val slackToken: String
     private var mWebApiClient: SlackWebApiClient? = null
 
-    val emojiList: Map<String, String>
+    private val emojiList: Map<String, String>
         get() {
             mWebApiClient = SlackClientFactory.createWebApiClient(slackToken)
             val emojiList = mWebApiClient!!.emojiList
             println(emojiList.toString())
-
             return emojiList
         }
 
     init {
-        slackToken = PhysicalBotService.KEY_ACCESS_TOKEN
+        slackToken = PhysicalBotService.Companion.loadAccessToken(context)
+        println("slackToken = "+ slackToken)
     }
 
     companion object {
@@ -32,6 +34,14 @@ class SlackController {
 
         fun removeAuthToken(context: Context) {
             PhysicalBotService.saveAccessToken(context, "")
+        }
+    }
+
+    fun loadEmojiList(onCompletion: (map: Map<String, String>) -> Unit) {
+        val handlerThread = HandlerThread("emojiList")
+        handlerThread.start()
+        Handler(handlerThread.looper).post {
+            onCompletion(emojiList)
         }
     }
 }

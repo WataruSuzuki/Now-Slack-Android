@@ -2,6 +2,7 @@ package jp.co.devjchankchan.physicalbotlibrary
 
 import android.app.Notification
 import android.app.Service
+import android.bluetooth.*
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -16,6 +17,7 @@ import org.altbeacon.beacon.*
 import org.altbeacon.beacon.MonitorNotifier
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.RangeNotifier
+import java.util.*
 
 class PhysicalBotService : Service(), BeaconConsumer {
 
@@ -44,7 +46,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
             saveDistanceThreshold(applicationContext, value)
         }
     var slackToken: String
-        get() = getPreference(applicationContext).getString(KEY_ACCESS_TOKEN, "")
+        get() = loadAccessToken(applicationContext)
         set(value) {
             saveAccessToken(applicationContext, value)
         }
@@ -79,7 +81,25 @@ class PhysicalBotService : Service(), BeaconConsumer {
 
         override fun didEnterRegion(region: Region) {
             Log.d(LOG_TAG, "didEnterRegion")
+            startRanging()
+        }
 
+        override fun didExitRegion(region: Region) {
+            Log.d(LOG_TAG, "didExitRegion")
+            stopRanging()
+        }
+
+        override fun didDetermineStateForRegion(side: Int, region: Region) {
+            Log.d(LOG_TAG, "didDetermineStateForRegion side = " + side)
+            notifyMessage(RegionNotification.DID_DETERMINE_STATE_FOR_REGION, NotificationId.REGION)
+
+            when (side) {
+                MonitorNotifier.INSIDE -> startRanging()
+                //MonitorNotifier.OUTSIDE -> stopRanging()
+            }
+        }
+
+        fun startRanging() {
             try {
                 beaconManager.startRangingBeaconsInRegion(Region("unique-id-001", currentIdentifier, null, null))
                 notifyMessage(RegionNotification.DID_ENTER_REGION, NotificationId.REGION)
@@ -88,19 +108,13 @@ class PhysicalBotService : Service(), BeaconConsumer {
             }
         }
 
-        override fun didExitRegion(region: Region) {
-            Log.d(LOG_TAG, "didExitRegion")
+        fun stopRanging() {
             try {
                 beaconManager.stopRangingBeaconsInRegion(Region("unique-id-001", currentIdentifier, null, null))
                 notifyMessage(RegionNotification.DID_EXIT_REGION, NotificationId.REGION)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
-        }
-
-        override fun didDetermineStateForRegion(i: Int, region: Region) {
-            Log.d(LOG_TAG, "didDetermineStateForRegion")
-            notifyMessage(RegionNotification.DID_DETERMINE_STATE_FOR_REGION, NotificationId.REGION)
         }
     }
 
@@ -109,6 +123,8 @@ class PhysicalBotService : Service(), BeaconConsumer {
             myLeaveSeatMonitoringListener?.onUpdateRangeBeaconsInRegion(beacons, region)
             for (beacon in beacons) {
                 Log.i(LOG_TAG, "UUID:" + beacon.id1 + ", major:" + beacon.id2 + ", minor:" + beacon.id3 + ", Distance:" + beacon.distance + ",RSSI" + beacon.rssi + ", TxPower" + beacon.txPower)
+                Log.i(LOG_TAG, "bluetoothName:" + beacon.bluetoothName + ", parserIdentifier:" + beacon.parserIdentifier + ", bluetoothAddress:" + beacon.bluetoothAddress + ", manufacturer:" + beacon.manufacturer + ",id2" + beacon.id2 + ", id3" + beacon.id3)
+
                 if (iBeaconUUID.equals(beacon.id1.toString(), true)) {
                     if (currentDistance <= 0.0) {
                         //Do nothing
@@ -187,6 +203,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
             putPreference(context, KEY_DISTANCE_THRESHOLD, value.toString())
         }
 
+        fun loadAccessToken(context: Context) = getPreference(context).getString(KEY_ACCESS_TOKEN, "")
         fun saveAccessToken(context: Context, value: String) {
             putPreference(context, KEY_ACCESS_TOKEN, value)
         }
