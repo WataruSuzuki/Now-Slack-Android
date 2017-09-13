@@ -32,7 +32,7 @@ public class SlackManagerFragment extends Fragment {
         public void onListFragmentInteraction(SlackMenuItem item) {
             switch (item.getId()) {
                 case AUTH:
-                    SlackController.requestAuthToken(getActivity());
+                    SlackController.Companion.requestAuthToken(getActivity());
                     break;
                 case EMOJI_LIST:
                     slackController.getEmojiList();
