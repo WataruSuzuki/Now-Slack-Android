@@ -12,9 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import jp.co.devjchankchan.now_slack_android.R;
-import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent;
-import jp.co.devjchankchan.physicalbotlibrary.AuthActivity;
-import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent.SlackMenuItem;
+import jp.co.devjchankchan.now_slack_android.fragments.content.SlackContent;
+import jp.co.devjchankchan.now_slack_android.fragments.content.SlackContent.SlackMenuItem;
 import jp.co.devjchankchan.physicalbotlibrary.SlackController;
 
 /**
@@ -76,7 +75,7 @@ public class SlackManagerFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyAccountRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyAccountRecyclerViewAdapter(new SlackContent(context).getITEMS(), mListener));
 
         }
         return view;

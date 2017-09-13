@@ -11,4 +11,10 @@
     <string name="notify_leave_seat">Leave from seat</string>
 
     <string name="msg_fail_access_token">Failed to authorization</string>
+
+    <string name="authentication">Authentication</string>
+    <string name="emoji_list">Emoji List</string>
+    <string name="set_emoji">Set Emoji</string>
+
+    <string name="log_out">Log out</string>
 </resources>

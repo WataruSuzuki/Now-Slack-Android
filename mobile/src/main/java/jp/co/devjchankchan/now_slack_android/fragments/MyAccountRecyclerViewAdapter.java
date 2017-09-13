@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import jp.co.devjchankchan.now_slack_android.R;
 import jp.co.devjchankchan.now_slack_android.fragments.SlackManagerFragment.OnListFragmentInteractionListener;
-import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent.SlackMenuItem;
+import jp.co.devjchankchan.now_slack_android.fragments.content.SlackContent.SlackMenuItem;
 
 import java.util.List;
 
@@ -37,8 +37,8 @@ public class MyAccountRecyclerViewAdapter extends RecyclerView.Adapter<MyAccount
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).getId());
+        holder.mContentView.setText(mValues.get(position).getContent());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
