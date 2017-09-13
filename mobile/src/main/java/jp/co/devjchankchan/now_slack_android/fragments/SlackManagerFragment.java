@@ -36,6 +36,8 @@ public class SlackManagerFragment extends Fragment {
                     break;
                 case EMOJI_LIST:
                     slackController.getEmojiList();
+                case LOG_OUT:
+                    SlackController.Companion.removeAuthToken(getActivity());
                     break;
             }
         }

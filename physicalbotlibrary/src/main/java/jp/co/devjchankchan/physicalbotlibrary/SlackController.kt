@@ -29,5 +29,9 @@ class SlackController {
         fun requestAuthToken(context: Context) {
             context.startActivity(Intent(context, AuthActivity::class.java))
         }
+
+        fun removeAuthToken(context: Context) {
+            PhysicalBotService.saveAccessToken(context, "")
+        }
     }
 }
