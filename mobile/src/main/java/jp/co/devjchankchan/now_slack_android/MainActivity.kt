@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupToolbar()
         setupNavigationView()
         setupFloatingActionButton()
+        changePage(R.id.nav_gallery)
     }
 
     private fun setupFloatingActionButton() {
@@ -91,24 +92,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
-        val id = item.itemId
 
-        if (id == R.id.nav_camera) {
-            val page = DrawerPages.values().filter { id == it.menuId }.first()
-//            toggleToolbarElevation(page.shouldToggleToolbar())
-            changePage("(・∀・)", page.createFragment())
+        changePage(item.itemId)
 
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+//        val id = item.itemId
+//        if (id == R.id.nav_camera) {
+//
+//        } else if (id == R.id.nav_gallery) {
+//
+//        } else if (id == R.id.nav_slideshow) {
+//
+//        } else if (id == R.id.nav_manage) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
@@ -132,17 +132,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mMainLooperHandler.postDelayed({ startService(service) }, 500)
     }
 
-    private fun changePage(selectedPage: String, fragment: Fragment) {
+    private fun changePage(itemId: Int) {
+        val page = DrawerPages.values().filter { itemId == it.menuId }.first()
 //        mSelectedContent = selectedPage
 //        mActionBar.setTitle(selectedPage)
 
         // Swap page.
-        if (fragment != null) {
-            val fragmentManager = fragmentManager
-            val ft = fragmentManager.beginTransaction()
-            ft.replace(R.id.content_container, fragment)
-            ft.commit()
-        }
+        val fragmentManager = fragmentManager
+        val ft = fragmentManager.beginTransaction()
+        ft.replace(R.id.content_container, page.createFragment())
+        ft.commit()
     }
 
     companion object {
