@@ -1,6 +1,5 @@
 package jp.co.devjchankchan.now_slack_android
 
-import android.app.Fragment
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
