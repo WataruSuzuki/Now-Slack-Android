@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupToolbar()
         setupNavigationView()
         setupFloatingActionButton()
-        changePage(R.id.nav_gallery)
+        changePage(R.id.nav_summary)
     }
 
     private fun setupFloatingActionButton() {

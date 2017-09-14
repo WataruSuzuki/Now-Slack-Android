@@ -8,7 +8,7 @@ enum class DrawerPages(val menuId: Int) {
     BEACON_MANAGER(R.id.nav_camera) {
         override fun createFragment(): Fragment = BeaconManagerFragment()
     },
-    SUMMARY(R.id.nav_gallery) {
+    SUMMARY(R.id.nav_summary) {
         override fun createFragment(): Fragment = SummaryFragment()
     };
 
