@@ -42,9 +42,7 @@ class PhysicalBotService : Service(), BeaconConsumer {
         throw UnsupportedOperationException("Not yet implemented")
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        return Service.START_REDELIVER_INTENT
-    }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = Service.START_REDELIVER_INTENT
 
     override fun onCreate() {
         super.onCreate()
