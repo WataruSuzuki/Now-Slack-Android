@@ -1,6 +1,7 @@
 package jp.co.devjchankchan.now_slack_android.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import jp.co.devjchankchan.now_slack_android.R;
 import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent;
 import jp.co.devjchankchan.now_slack_android.fragments.dummy.DummyContent.DummyItem;
+import jp.co.devjchankchan.slackapilibrary.AuthActivity;
 
 import java.util.List;
 
@@ -28,7 +30,12 @@ public class AccountManagerFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private OnListFragmentInteractionListener mListener = new OnListFragmentInteractionListener() {
+        @Override
+        public void onListFragmentInteraction(DummyItem item) {
+            startActivity(new Intent(getActivity(), AuthActivity.class));
+        }
+    };
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -71,6 +78,7 @@ public class AccountManagerFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(new MyAccountRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
         }
         return view;
     }

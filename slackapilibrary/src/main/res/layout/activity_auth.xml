@@ -6,4 +6,10 @@
     android:layout_height="match_parent"
     tools:context="jp.co.devjchankchan.slackapilibrary.AuthActivity">
 
+    <WebView
+        android:id="@+id/auth_web"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </WebView>
+
 </android.support.constraint.ConstraintLayout>
